@@ -1,68 +1,68 @@
 import * as THREE from 'three';
-import useLogger from './logger';
-const log = useLogger();
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
 export interface ARScene {
-    makeObjectTree(): THREE.Object3D;
+    makeObjectTree(): Promise<THREE.Object3D>;
     animate(sec: number): void;
-
     name(): string;
-};
+}
 
 export class TestScene implements ARScene {
     cube?: THREE.Object3D;
+    loader: any;
+
+    constructor() {
+        // 初期化時に loader を作成
+        this.loader = new GLTFLoader();
+    }
 
     name() { return "test"; }
-    makeObjectTree(): THREE.Object3D {
-        // log.info("make object tree", this.name())
-        const geometry = new THREE.BoxGeometry(1, 1, 1).translate(
-            0,
-            0.5,
-            0
-        );
 
-        const material = new THREE.MeshPhongMaterial({
-            color: 0xffffff * Math.random(),
+    makeObjectTree(): Promise<THREE.Object3D> {
+        return new Promise((resolve) => {
+            // .glb ファイルのパスを指定してロード
+            this.loader.load('src/note.glb', (gltf: { scene: THREE.Object3D<THREE.Object3DEventMap> | undefined; }) => {
+                // ロードが完了したら、gltf.scene を取得して利用する
+                this.cube = gltf.scene;
+                resolve(this.cube!); // 非同期処理が完了したので、resolve に Object3D を渡す
+            });
         });
-        const cube = new THREE.Mesh(geometry, material);
-        this.cube = cube
-        return cube;
     }
 
     animate(sec: number): void {
         if (!this.cube) return;
 
         // 立方体を回転させるアニメーション
-        //this.cube.rotation.x += 0.01;
         this.cube.rotation.y += 1 * sec;
     }
 }
 
-
 export class TestScene2 implements ARScene {
     cube?: THREE.Object3D;
+    loader: any;
+
+    constructor() {
+        // 初期化時に loader を作成
+        this.loader = new GLTFLoader();
+    }
 
     name() { return "test2"; }
 
-    makeObjectTree(): THREE.Object3D {
-        // 立方体のジオメトリを作成
-        const geometry = new THREE.ConeGeometry(1, 1).translate(0, 0.5, 0);
-
-        // 材質を作成（色を指定）
-        const material = new THREE.MeshPhongMaterial({ color: 0x00ff00 });
-
-        // 立方体のメッシュを作成
-        this.cube = new THREE.Mesh(geometry, material);
-
-        return this.cube;
+    makeObjectTree(): Promise<THREE.Object3D> {
+        return new Promise((resolve) => {
+            // .glb ファイルのパスを指定してロード
+            this.loader.load('src/note.glb', (gltf: { scene: THREE.Object3D<THREE.Object3DEventMap> | undefined; }) => {
+                // ロードが完了したら、gltf.scene を取得して利用する
+                this.cube = gltf.scene;
+                resolve(this.cube!); // 非同期処理が完了したので、resolve に Object3D を渡す
+            });
+        });
     }
 
     animate(sec: number): void {
         if (!this.cube) return;
 
         // 立方体を回転させるアニメーション
-        //this.cube.rotation.x += 0.01;
         this.cube.rotation.y += 0.01;
     }
 }
-
