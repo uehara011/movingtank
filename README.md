@@ -24,7 +24,7 @@ openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -days 365
 と入力する（クオーテーションは入力しない）
 
 ### viteの設定
-//vite.config.tsのserverプロパティを編集
+//vite.config.tsのserverプロパティを編集(以下の修正は、パスフレーズ0000としてソースコードに反映済みです）
 ```
   server: {
     host: '0.0.0.0',

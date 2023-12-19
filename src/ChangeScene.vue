@@ -2,14 +2,14 @@
 import { useAREngine } from './AREngine';
 import { TestScene, TestScene2 } from './scene';
 
-const webar = useAREngine(); //シングルトンを取得
+const ar_engine = useAREngine(); //シングルトンを取得
 
 const scene_a = () => {
-    webar.replaceScene(new TestScene());
+    ar_engine.replaceScene(new TestScene());
 }
 
 const scene_b = () => {
-    webar.replaceScene(new TestScene2());
+    ar_engine.replaceScene(new TestScene2());
 }
 
 </script>
